@@ -36,11 +36,24 @@
 
     .wrap__price,
     .wrap__initialPayment,
-    .wrap__term {
+    .wrap__term,
+    .wrap__sum,
+    .wrap__monthPayment,
+    button {
         width: 427px;
         height: 119px;
         margin-right: 32px;
     }
+
+    .wrap__sum,
+    .wrap__monthPayment {
+        margin-top: 44px;
+    }
+
+    button {
+        margin-top: 54px;
+    }
+
 }
 
 label {
@@ -78,15 +91,15 @@ input[type=number] {
 .percent {
     position: relative;
     left: 330px;
-    top: -78px;
+    top: -72px;
     padding: 15px 17px;
 
     input {
-        padding-right: 32px;
-        padding-left: 5px;
+        padding-right: 25px;
+        padding-left: 7px;
         padding-bottom: 10px;
-        width: 70px;
-        height: 50px;
+        width: 60px;
+        height: 40px;
         background: #EBEBEC;
         border-radius: 16px;
         font-family: 'Nekst';
@@ -99,8 +112,8 @@ input[type=number] {
 
     .percent_symbol {
         position: relative;
-        right: 30px;
-
+        right: 25px;
+        pointer-events: none;
         font-family: 'Nekst';
         color: #575757;
         font-style: normal;
@@ -126,7 +139,7 @@ input[type=range]::-webkit-slider-runnable-track {
     width: 100%;
     height: 2px;
     cursor: pointer;
-    animate: 0.2s;
+    animation: 0.2s;
     box-shadow: 0px 0px 0px #000000;
     background: #FF9514;
     border-radius: 5px;
@@ -135,7 +148,7 @@ input[type=range]::-webkit-slider-runnable-track {
 
 input[type=range]::-webkit-slider-runnable-track:hover {
     height: 1px;
-    animate: 0.2s;
+    animation: 0.2s;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -172,7 +185,7 @@ input[type=range]::-moz-range-track {
     width: 100%;
     height: 2px;
     cursor: pointer;
-    animate: 0.2s;
+    animation: 0.2s;
     box-shadow: 0px 0px 0px #000000;
     background: #FF9514;
     border-radius: 50px;
@@ -193,7 +206,7 @@ input[type=range]::-ms-track {
     width: 100%;
     height: 2px;
     cursor: pointer;
-    animate: 0.2s;
+    animation: 0.2s;
     background: transparent;
     border-color: transparent;
     color: transparent;
@@ -238,7 +251,8 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-.wrap__initialPayment, .wrap__term {
+.wrap__initialPayment,
+.wrap__term {
     input[type=range] {
         left: 25px;
         top: -15px;
@@ -258,12 +272,32 @@ input::-webkit-inner-spin-button {
 
 .term__symbol {
     font-family: 'Nekst';
+    font-style: normal;
+    font-weight: 100;
+    font-size: 30px;
+    line-height: 36px;
+    color: #575757;
+    position: relative;
+    top: -69px;
+    left: 340px;
+}
+
+.wrap__sum,
+.wrap__monthPayment {
+    label {
+        margin-bottom: 8px;
+    }
+
+    input {
+        padding: 0px;
+        padding-top: 10px;
+        margin: 0px;
+        background-color: white;
+        height: 49px;
+        font-family: 'Nekst';
         font-style: normal;
         font-weight: 100;
-        font-size: 30px;
-        line-height: 36px;
+        font-size: 54px;
         color: #575757;
-        position: relative;
-        top: -69px;
-        left: 340px;
+    }
 }
