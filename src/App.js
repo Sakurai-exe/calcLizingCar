@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.scss";
 
 function App() {
@@ -6,79 +6,99 @@ function App() {
   const [initialPayment, setInitialPayment] = useState(429000);
   const [finalPercent, setFinalPercent] = useState(13);
   const [term, setTerm] = useState(60);
-  const [sum, setSum] = useState(23452345234);
+  const [sum, setSum] = useState(7334640);
   const [monthPayment, setMonthPayment] = useState(115094);
+  const [visibleSum, setVisibleSum] = useState("7334640 ₽");
+  const [visibleMonthPayment, setVisibleMonthPayment] = useState("115094 ₽");
+
   useEffect(() => {
+    setInitialPayment(Math.trunc(price * (finalPercent / 100)));
     setMonthPayment(
-      Math.round(
+      Math.trunc(
         (price - initialPayment) *
           ((0.035 * Math.pow(1 + 0.035, term)) /
             (Math.pow(1 + 0.035, term) - 1)),
       ),
     );
-  }, [initialPayment, term]);
-
-  useEffect(() => {
     setSum(initialPayment + term * monthPayment);
-  }, [initialPayment, term, monthPayment]);
-
-  const priceChange = (e) => {
-    const newPercent = finalPercent / 100;
-    if (e.target.value < 1000000) {
-      setPrice(1000000);
-      setInitialPayment(Math.round(1000000 * newPercent));
-    } else if (e.target.value > 6000000) {
+    const addCommas = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const removeNonNumeric = (num) => num.toString().replace(/[^0-9]/g, "");
+    setVisibleMonthPayment(addCommas(removeNonNumeric(monthPayment)) /*+ " ₽"*/);
+    setVisibleSum(addCommas(removeNonNumeric(sum)) /* + " ₽"*/);
+  });
+  const priceChangeAlways = (e) => {
+    let newPercent = finalPercent / 100;
+    let number = Math.trunc(e.target.value);
+    let array = [...number.toString()].map(Number);
+    if (array.length > 7 || e.target.value > 6000000) {
       setPrice(6000000);
-      setInitialPayment(Math.round(6000000 * newPercent));
+      setInitialPayment(Math.trunc(6000000 * newPercent));
+    } else if (array.length < 0 || e.target.value < 0) {
+      setPrice(1000000);
+      setInitialPayment(Math.trunc(1000000 * newPercent));
     } else {
       setPrice(e.target.value);
-      setInitialPayment(Math.round(price * newPercent));
+      setInitialPayment(Math.trunc(price * newPercent));
     }
   };
 
-  const priceChangeAlways = (e) => {
-    setPrice(e.target.value);
-  };
-
-  const finalPercentChange = (e) => {
-    if (e.target.value < 10) {
-      setFinalPercent(10);
-      initialPaymentChange(10);
-    } else if (e.target.value > 60) {
-      setFinalPercent(60);
-      initialPaymentChange(60);
-    } else {
-      setFinalPercent(e.target.value);
-      initialPaymentChange(e.target.value);
+  const priceChangeCondition = (e) => {
+    let newPercent = finalPercent / 100;
+    if (!(e.target.value >= 1000000 && e.target.value <= 6000000)) {
+      setPrice(1000000);
+      setInitialPayment(Math.trunc(1000000 * newPercent));
     }
   };
 
   const finalPercentChangeAlways = (e) => {
-    setFinalPercent(e.target.value);
+    let number = e.target.value;
+    let array = [...number.toString()].map(Number);
+    if (array.length > 2 || number > 60) {
+      setFinalPercent(60);
+      initialPaymentChange(60);
+    } else if (number < 0) {
+      setFinalPercent(10);
+      initialPaymentChange(10);
+    } else {
+      setFinalPercent(number);
+      initialPaymentChange(number);
+    }
+  };
+
+  const finalPercentCondition = (e) => {
+    if (!(e.target.value >= 10 && e.target.value <= 60)) {
+      setFinalPercent(10);
+      initialPaymentChange(10);
+    }
   };
 
   const initialPaymentChange = (e) => {
     const percent = e / 100;
-    setInitialPayment(Math.round(price * percent));
+    setInitialPayment(Math.trunc(price * percent));
   };
 
-  const termChange = (e) => {
-    if (e.target.value < 1) {
-      setTerm(1);
-    } else if (e.target.value > 60) {
+  const termChangeAlways = (e) => {
+    let number = e.target.value;
+    let array = [...number.toString()].map(Number);
+    if (array.length > 2 || number > 60) {
       setTerm(60);
-    } else {
+    } else if (number < 0) {
+      setTerm(1);
+    }
+    else {
       setTerm(e.target.value);
     }
   };
 
-  const termChangeAlways = (e) => {
-    setTerm(e.target.value);
+  const termChangeCondition = (e) => {
+    if (!(e.target.value >= 1 && e.target.value <= 60)) {
+      setTerm(1);
+    }
   };
 
-  // const addCommas = (num) =>
-  //   num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  // const removeNonNumeric = (num) => num.toString().replace(/[^0-9]/g, "");
+  // const inputHover = (e) => { 
+  //   e.currentTarget.style.backgroundColor = "#E1E1E1";
+  // }
 
   return (
     <div className='App'>
@@ -90,14 +110,15 @@ function App() {
           <label htmlFor='price'>Стоимость автомобиля</label>
           <input
             type='number'
-            // pattern='^[ 0-9]+$'
             value={price}
             maxLength='7'
             min='1000000'
             max='6000000'
             name='price'
+            required
             onChange={priceChangeAlways}
-            onBlur={priceChange}
+            onBlur={priceChangeCondition}
+            // onMouseMove={inputHover}
           />
           <input
             type='range'
@@ -107,7 +128,6 @@ function App() {
             step='50000'
             name='price'
             onChange={priceChangeAlways}
-            onMouseLeave={priceChange}
           />
           <span className='required'>₽</span>
         </div>
@@ -118,6 +138,7 @@ function App() {
             value={initialPayment}
             name='initialPayment'
             disabled
+            id="not-editable"
           />
           <input
             type='range'
@@ -126,7 +147,7 @@ function App() {
             max='60'
             step='1'
             name='finalPercent'
-            onChange={finalPercentChange}
+            onChange={finalPercentChangeAlways}
           />
           <span className='percent'>
             <input
@@ -136,8 +157,9 @@ function App() {
               min='10'
               max='60'
               name='finalPercent'
+              required
               onChange={finalPercentChangeAlways}
-              onBlur={finalPercentChange}
+              onBlur={finalPercentCondition}
             />
             <span className='percent_symbol'>%</span>
           </span>
@@ -151,8 +173,9 @@ function App() {
             min='0'
             max='60'
             name='term'
+            required
             onChange={termChangeAlways}
-            onBlur={termChange}
+            onBlur={termChangeCondition}
           />
           <input
             type='range'
@@ -162,7 +185,6 @@ function App() {
             step='1'
             name='term'
             onChange={termChangeAlways}
-            onMouseLeave={termChange}
           />
           <span className='term__symbol'>мес.</span>
         </div>
@@ -170,18 +192,21 @@ function App() {
       <div className='wrap'>
         <div className='wrap__sum'>
           <label htmlFor='sum'>Сумма договора лизинга</label>
-          <input type='number' value={sum} name='sum' disabled />
+          <div className='flex-wrap'>
+            <span className='flex-wrap__value'>
+              {visibleSum}
+              <span className='rur-symbol'>₽</span>
+            </span>
+          </div>
         </div>
         <div className='wrap__monthPayment'>
           <label htmlFor='monthPayment'>Ежемесячный платеж от</label>
-          <input
-            type='number'
-            value={monthPayment}
-            name='monthPayment'
-            disabled
-          />
+          <span className='flex-wrap__value'>
+            {visibleMonthPayment}
+            <span className='rur-symbol'>₽</span>
+          </span>
         </div>
-        <button>Оставить заявку</button>
+        <button type='submit'>Оставить заявку</button>
       </div>
     </div>
   );

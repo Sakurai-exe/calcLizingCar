@@ -8,6 +8,13 @@
     src: url('./fonts/Gilroy/Gilroy-Regular.ttf') format('ttf'), url('./fonts/Gilroy/Gilroy-Regular.woff') format('woff');
 }
 
+input:focus,
+input:active,
+button:focus,
+button:active {
+    outline: none;
+}
+
 .App {
     max-width: 1440px;
     min-height: 100vh;
@@ -38,8 +45,7 @@
     .wrap__initialPayment,
     .wrap__term,
     .wrap__sum,
-    .wrap__monthPayment,
-    button {
+    .wrap__monthPayment {
         width: 427px;
         height: 119px;
         margin-right: 32px;
@@ -51,7 +57,29 @@
     }
 
     button {
+        background: #FF9514;
+        border: 0;
+        border-radius: 40px;
+        width: 426px;
+        height: 68px;
+        font-family: 'Nekst';
+        font-style: normal;
+        font-weight: 100;
+        font-size: 30px;
+        line-height: 36px;
+        color: #FFFFFF;
         margin-top: 54px;
+    }
+
+    button:hover {
+        background: #111111;
+    }
+
+    button:active {
+        background: #575757;
+    }
+    button:disabled {
+        background: #fff;
     }
 
 }
@@ -81,6 +109,15 @@ input {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+input:hover:not(#not-editable) {
+    background: #E1E1E1;
+}
+input:focus:not(#not-editable) {
+    background: white;
+        border: 2px solid #F3F3F4;
+        border-radius: 16px;
 }
 
 input[type=number] {
@@ -284,20 +321,25 @@ input::-webkit-inner-spin-button {
 
 .wrap__sum,
 .wrap__monthPayment {
+    display: flex;
+    flex-direction: column;
+
     label {
         margin-bottom: 8px;
     }
+}
 
-    input {
-        padding: 0px;
-        padding-top: 10px;
-        margin: 0px;
-        background-color: white;
-        height: 49px;
-        font-family: 'Nekst';
-        font-style: normal;
-        font-weight: 100;
-        font-size: 54px;
-        color: #575757;
+.flex-wrap__value {
+    font-family: 'Nekst';
+    font-style: normal;
+    font-weight: 100;
+    font-size: 54px;
+    color: #575757;
+    height: 49px;
+
+    .rur-symbol {
+        position: relative;
+        top: -6px;
+        left: 10px
     }
 }
