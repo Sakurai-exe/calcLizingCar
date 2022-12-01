@@ -1,6 +1,6 @@
 
 ### `git clone https://github.com/Sakurai-exe/calcLizingCar.git` склонировать репозиторий.
-### `npm install` Для скачивания недостающих пакетов.
+### `npm install` `yarn install` Для скачивания недостающих пакетов.
 ### `npm start` Для запуска приложения локально.
 
 Калькутор лизинга авто.
